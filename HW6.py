@@ -1,39 +1,71 @@
 #Homework #6
-# 1 Prime Clusters
-# You have obtained a dataset of star temperatures from different stellar clusters.
-# For your research, you are interested only in clusters where at least one star’s
-# temperature is a prime number. Given a 2D NumPy array, write a function to
-# find the rows where at least one value is a prime number. For example:
-# >>> arr = np.array([[2, 3, 5], [4, 6, 8], [11, 13, 17], [7, 10, 13]])
-# >>> containsPrimes(arr)
 # array([[2, 3, 5],
 # [11, 13, 17],
 # [7, 10, 13]])
 import numpy as np 
 import math
+
 arr1 = np.array([[2, 3, 5], [4, 6, 8], [11, 13, 17], [7, 10, 13]])
-
 def is_prime(n):
-    if n <= 1:
-        return False  # Primes are greater than 1
-    if n <= 3:
-        return True  # 2 and 3 are prime
-    if n % 2 == 0 or n % 3 == 0:
-        return False  # Eliminate multiples of 2 and 3
-    
-    # Check for factors from 5 to √n, skipping even numbers
-    for i in range(5, int(math.sqrt(n)) + 1, 2):
+    if n < 2:
+        return False
+    for i in range(2, int(n ** 0.5) + 1):
         if n % i == 0:
-            return False  # Found a divisor, not prime
-    
-    return True  # No divisors found, it's prime
-
-
+            return False
+    return True
 
 def containsPrimes(arr):
-    arr2 = np.array()
-    for element in arr:
-        for number in element:
-            if is_prime(number) == 'True':
-                arr2.append(element)
-                
+    mask = np.apply_along_axis(lambda row: any(is_prime(num) for num in row), axis=1, arr=arr)
+    return arr[mask]
+
+print(containsPrimes(arr1))
+
+# #2.1
+def checkerboard():
+    return np.zeros((8, 8), dtype=int)
+print(checkerboard())
+
+# #2.2
+def checkerboard():
+    board = np.zeros((8, 8), dtype=int)
+    board[::2, ::2] = 1  # Fill 1s at even rows, even columns
+    return board
+
+print(checkerboard())
+
+# #2.3
+
+def checkerboard_3():
+    board = np.zeros((8, 8), dtype=int)
+    board[::2, ::2] = 1
+    board[1::2, 1::2] = 1
+    return board
+print(checkerboard_3())               
+
+# #2.4
+def reverse_checkerboard():
+    board = checkerboard_3()  # Get the normal checkerboard
+    return 1 - board  # Flip 1s to 0s and vice versa
+print(reverse_checkerboard())
+
+# # #3 The Expanding Universe
+universe = np.array(['galaxy', 'clusters'], dtype=str)
+def expansion(iterable, number):
+    separator = " "*number
+    return (np.char.join(separator, iterable))
+
+print(expansion(universe, 10))
+
+# # 4 Second-Dimmest Star
+np.random.seed(123)
+stars = np.random.randint(500, 2000, (5,5))
+
+def secondDimmest(array):  
+    sorted_array = np.sort(array, axis=0)  # Sort each column
+    return sorted_array[1, :]  # Select the second smallest value in each column
+
+print(secondDimmest(stars))  # Print result
+
+
+
+        
